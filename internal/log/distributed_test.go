@@ -74,8 +74,28 @@ func TestMultipleNodes(t *testing.T) {
 			return true
 		}, 500*time.Millisecond, 50*time.Millisecond)
 	}
-	err := logs[0].Leave("1")
+
+	// START: get_servers
+	servers, err := logs[0].GetServers()
 	require.NoError(t, err)
+	require.Equal(t, 3, len(servers))
+	require.True(t, servers[0].IsLeader)
+	require.False(t, servers[1].IsLeader)
+	require.False(t, servers[2].IsLeader)
+
+	// START: distributed_log_test_leave
+	err = logs[0].Leave("1") //<label id="before_leave" />
+	require.NoError(t, err)  //<label id="after_leave" />
+
+	time.Sleep(50 * time.Millisecond) //<label id="second_leave" />
+
+	servers, err = logs[0].GetServers()
+	require.NoError(t, err)
+	require.Equal(t, 2, len(servers))
+	require.True(t, servers[0].IsLeader)
+	require.False(t, servers[1].IsLeader)
+	// END: get_servers
+
 	time.Sleep(50 * time.Millisecond)
 	off, err := logs[0].Append(&api.Record{Value: []byte("third")})
 	require.NoError(t, err)
