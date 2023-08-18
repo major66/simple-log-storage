@@ -1,5 +1,7 @@
 package log
 
+// since we have a distributed log that handle replication through Raft this file, the usage of replicator is deprecated
+
 import (
 	"context"
 	api "github.com/major66/simple-log-storage/api/v1"
