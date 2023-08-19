@@ -9,5 +9,6 @@ specificities:
   destination server in case of high number of simultaneous requests)
 - Command line using **Cobra**
 - Configuration management using **Viper**
+- Testify for testing
 
 
